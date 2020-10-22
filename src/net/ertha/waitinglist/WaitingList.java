@@ -41,7 +41,7 @@ public class WaitingList extends Plugin {
 
         String server = configuration.getString("Servers.1");
 
-        Queues.add(new WLQueue(server));
+        Queues.add(new WLQueue(server));// This creates a NUll exception needs to be fixed...
 
         pm.registerCommand(this, new WLCommands(this));
         pm.registerListener(this, new WLEventsListener(server, this));
