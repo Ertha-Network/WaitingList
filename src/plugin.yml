@@ -1,0 +1,5 @@
+name: WaitingList
+version: 1.0.0
+author: Maiks86
+main: net.ertha.waitinglist.WaitingList
+api-version: 1.14

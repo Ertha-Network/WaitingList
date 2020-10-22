@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WaitingList:jar">
+    <output-path>$PROJECT_DIR$/../Travertine/plugins</output-path>
+    <root id="archive" name="WaitingList.jar">
+      <element id="module-output" name="WaitingList" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Dependencies/Travertine.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
