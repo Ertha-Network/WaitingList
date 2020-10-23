@@ -10,13 +10,16 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class WaitingList extends Plugin {
 
     private File file;
     private Configuration configuration;
-    public List<WLQueue> Queues;
+    public ArrayList<WLQueue> Queues = new ArrayList<WLQueue>();
+    public Boolean enableVerbose = false;
+
     @Override
     public void onEnable(){
         PluginManager pm = ProxyServer.getInstance().getPluginManager();
@@ -41,13 +44,27 @@ public class WaitingList extends Plugin {
 
         String server = configuration.getString("Servers.1");
 
-        Queues.add(new WLQueue(server));// This creates a NUll exception needs to be fixed...
+        WLQueue que = new WLQueue(this, server);
+        getLogger().info(que.serverName);
+        Queues.add(que);// This creates a NUll exception needs to be fixed...
 
         pm.registerCommand(this, new WLCommands(this));
         pm.registerListener(this, new WLEventsListener(server, this));
 
+        ProxyServer.getInstance().getScheduler().schedule(this,this::checkQueue,10, 10, TimeUnit.SECONDS);
 
         getLogger().info("has loaded");
+    }
+
+    public void checkQueue(){
+        for (WLQueue queue:Queues) {
+            queue.ping();
+        }
+    }
+
+    public void verbose(String log){
+        if(enableVerbose)
+            getLogger().info(log);
     }
 
     @Override

@@ -30,13 +30,18 @@ public class WLEventsListener implements Listener{
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerConnect(ServerConnectEvent event){
         if(event.getTarget().getName().equals(server)){
-
+            for (WLQueue queue:waitingList.Queues) {
+                if(queue.connectingPlayer.contains(event.getPlayer().getName())){
+                    queue.connectingPlayer.remove(event.getPlayer().getName());
+                    return;
+                }
+            }
             event.setCancelled(true);
-            waitingList.addToQueue(event.getPlayer(),event.getTarget().getName());
             event.getPlayer().sendMessage(new TextComponent(
                     ChatColor.GRAY + "[" + ChatColor.RED + "WaitingList" + ChatColor.GRAY + "] " +
-                    ChatColor.YELLOW + server + " has a waiting list and you are now on it. " + ChatColor.GREEN +
-                    "Please enjoy another server while you wait."));
+                            ChatColor.YELLOW + server + " has a waiting list and you are now on it. " + ChatColor.GREEN +
+                            "Please enjoy another server while you wait."));
+            waitingList.addToQueue(event.getPlayer(),event.getTarget().getName());
         }
     }
 
