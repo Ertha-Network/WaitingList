@@ -24,7 +24,7 @@ public class WaitingList extends Plugin {
         for (String server : servers) {
 
             Queue que = new Queue(this, server);
-            getLogger().info(que.serverName);
+            getLogger().info("Created queue for "+que.serverName);
             Queues.add(que);
 
             pm.registerCommand(this, new Commands(this));
