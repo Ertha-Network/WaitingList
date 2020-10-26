@@ -10,11 +10,11 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 
 
-public class WLEventsListener implements Listener{
+public class EventsListener implements Listener{
     private final String server;
     private final WaitingList waitingList;
 
-    public WLEventsListener(String _server, WaitingList _waitingList){
+    public EventsListener(String _server, WaitingList _waitingList){
         server = _server;
         waitingList = _waitingList;
 
@@ -30,7 +30,7 @@ public class WLEventsListener implements Listener{
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerConnect(ServerConnectEvent event){
         if(event.getTarget().getName().equals(server)){
-            for (WLQueue queue:waitingList.Queues) {
+            for (Queue queue:waitingList.Queues) {
                 if(queue.connectingPlayer.contains(event.getPlayer().getName())){
                     queue.connectingPlayer.remove(event.getPlayer().getName());
                     return;

@@ -10,11 +10,11 @@ import net.md_5.bungee.event.EventHandler;
 
 import java.util.List;
 
-public class WLCommands extends Command {
+public class Commands extends Command {
 
     public final WaitingList waitingList;
 
-    public WLCommands(WaitingList _waitingList){
+    public Commands(WaitingList _waitingList){
         super("enter");
         waitingList = _waitingList;
     }

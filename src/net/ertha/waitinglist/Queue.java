@@ -2,7 +2,6 @@ package net.ertha.waitinglist;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,28 +9,27 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 
-public class WLQueue {
+public class Queue {
 
     public String serverName;
-    public Queue<ProxiedPlayer> normalQueue = new LinkedList<>();
-    public Queue<ProxiedPlayer> vipQueue = new LinkedList<>();
+    public java.util.Queue<ProxiedPlayer> normalQueue = new LinkedList<>();
+    public java.util.Queue<ProxiedPlayer> vipQueue = new LinkedList<>();
     public Integer maxPlayers = 0;
     public Integer onlinePlayers = 0;
     public Boolean online = Boolean.FALSE;
     public Integer reservedSpots = 10;
     public ArrayList<String> connectingPlayer = new ArrayList<>();
-    private final WaitingList waitingList;
+    private final WaitingList wl;
 
 
-    public WLQueue(WaitingList _waitingList, String _serverName){
+    public Queue(WaitingList waitingList, String _serverName){
          serverName = _serverName;
-         waitingList = _waitingList;
+         wl = waitingList;
     }
 
     public void add(ProxiedPlayer player){
-        waitingList.verbose("Adding "+player.getName()+" to Queue");
+        wl.verbose("Adding "+player.getName()+" to Queue");
         if(player.hasPermission("waitinglist.admin"))
             connect(player);
         else if(player.hasPermission("waitinglist."+serverName+".vip"))
@@ -42,20 +40,20 @@ public class WLQueue {
     }
 
     public void remove(ProxiedPlayer player){
-        waitingList.verbose("Removing "+player.getName()+" from Queue");
+        wl.verbose("Removing "+player.getName()+" from Queue");
         vipQueue.remove(player);
         normalQueue.remove(player);
     }
 
     private void connect(ProxiedPlayer player){
-        waitingList.verbose("Connecting: "+player.getName());
+        wl.verbose("Connecting: "+player.getName());
         connectingPlayer.add(player.getName());
         ServerInfo info = ProxyServer.getInstance().getServerInfo(serverName);
         player.connect(info, ServerConnectEvent.Reason.PLUGIN);
     }
 
     public void ping(){
-        waitingList.verbose("Ping for "+serverName);
+        wl.verbose("Ping for "+serverName);
         ProxyServer.getInstance().getServerInfo(serverName).ping((v, throwable) -> {
             if (throwable != null) {
                 online = false;
@@ -74,16 +72,16 @@ public class WLQueue {
                 maxPlayers = 0;
                 onlinePlayers = 0;
             }
-            waitingList.verbose("Currently ("+onlinePlayers+"\\"+maxPlayers+") online");
+            wl.verbose("Currently ("+onlinePlayers+"\\"+maxPlayers+") online");
 
             if(maxPlayers > onlinePlayers + reservedSpots){
-                waitingList.verbose("There is room on "+serverName);
+                wl.verbose("There is room on "+serverName);
                 if(!vipQueue.isEmpty())
                     connect(vipQueue.poll());
                 else if(!normalQueue.isEmpty())
                     connect(normalQueue.poll());
 
-                waitingList.verbose("Checked the Queues!");
+                wl.verbose("Checked the Queues!");
                 warnNextInQueue();
             }
         });
