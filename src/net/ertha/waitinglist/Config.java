@@ -56,6 +56,7 @@ public class Config {
                 List<String> servers = new ArrayList();
                 servers.add("anarchy");
                 configuration.set("Servers", servers);
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, file);
             }
         }catch (IOException e){
             e.printStackTrace();
